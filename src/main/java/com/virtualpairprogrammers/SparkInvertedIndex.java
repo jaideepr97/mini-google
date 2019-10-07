@@ -13,7 +13,7 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import scala.Tuple2;
 import scala.util.parsing.combinator.testing.Str;
 
-public class Main {
+public class SparkInvertedIndex {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -83,7 +83,6 @@ public class Main {
 				System.out.println(d._1 + " " + d._2);
 			System.out.println(".........................................");
 		}
-		
 		 */
 
 		//JavaPairRDD<List<String>, String> sentences = inputdocs.mapToPair(data -> new Tuple2< List<String>, String>(Arrays.asList(data._2().split(" ")), data._1()));
