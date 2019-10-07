@@ -18,12 +18,37 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		SparkConf conf = new SparkConf().setAppName("FirstApp").setMaster("local[*]");
-		String path = "hdfs://localhost:8020/docfiles/";
+		String contentPath = "hdfs://localhost:8020/docfiles/";
+		String id_url_path = "hdfs://localhost:8020/id_url_pairs/id_URL_pairs.txt";
 		JavaSparkContext sc = new JavaSparkContext(conf);
+		//Get id-url pairs
+		JavaPairRDD<String, String> idUrlPairs = sc.textFile(id_url_path).mapToPair(data ->
+		{
+			String[] temp = data.split(",");
+			return new Tuple2<>(temp[0]+".txt", temp[1]);
+		});
+		List<Tuple2<String, String>> idUrlPairsTest = idUrlPairs.take(10);
 		//Get all the input files as (docPath, content)
-		JavaPairRDD<String, String> inputdocs = sc.wholeTextFiles(path+"*");
-		//Convert it to an rdd as (docPath, List of words)
-		JavaPairRDD<String, List<String>> docToWords = inputdocs.mapToPair(data -> new Tuple2<>(data._1.substring(path.length()), Arrays.asList(data._2().split(" "))));
+		JavaPairRDD<String, String> inputdocs = sc.wholeTextFiles(contentPath+"*");
+		inputdocs = inputdocs.mapToPair(data -> new Tuple2<>(data._1.substring(contentPath.length()), data._2));
+		//List<Tuple2<String, String>> inputDocsTest = inputdocs.take(10);
+		//Join idUrlPairs with inputdocs
+		JavaPairRDD<String, Tuple2<String, String>> docIDToURLContent = inputdocs.join(idUrlPairs);
+		//List<Tuple2<String, Tuple2<String, String>>> test = docIDToURLContent.take(2);
+		/*
+		for(Tuple2<String, Tuple2<String, String>> r : test)
+		{
+			System.out.println("DocID:" + r._1);
+			System.out.println("Content: " + r._2._1);
+			System.out.println("URL: " + r._2._2);
+
+		}
+
+		 */
+		JavaPairRDD<String, String> urlToContent = docIDToURLContent.mapToPair(data -> new Tuple2<String, String>(data._2._2, data._2._1));
+		//List<Tuple2<String, String>> testUrlToContent = urlToContent.take(10);
+		//Convert it to an rdd as (url, List of words)
+		JavaPairRDD<String, List<String>> docToWords = urlToContent.mapToPair(data -> new Tuple2<>(data._1, Arrays.asList(data._2().split(" "))));
 		//Reverse it as (List of words, docPath)
 		JavaPairRDD<List<String>, String> wordsToDoc = docToWords.mapToPair(data -> new Tuple2<>(data._2(), data._1()));
 		//Flatten it to (word, docPath)
@@ -49,6 +74,7 @@ public class Main {
 		// Grouping by words
 		JavaPairRDD<String, Iterable<Tuple2<String, Integer>>> wordToDocCountGrouped = wordToDocCount.groupByKey();
 		List<Tuple2<String, Iterable<Tuple2<String, Integer>>>>result = wordToDocCountGrouped.take(10);
+		/*
 		for(Tuple2<String, Iterable<Tuple2<String, Integer>>> r : result)
 		{
 			System.out.println("Word:" + r._1);
@@ -57,6 +83,9 @@ public class Main {
 				System.out.println(d._1 + " " + d._2);
 			System.out.println(".........................................");
 		}
+		
+		 */
+
 		//JavaPairRDD<List<String>, String> sentences = inputdocs.mapToPair(data -> new Tuple2< List<String>, String>(Arrays.asList(data._2().split(" ")), data._1()));
 		/*
 		List<Tuple2<String, String>> result = inputdocs.collect();
