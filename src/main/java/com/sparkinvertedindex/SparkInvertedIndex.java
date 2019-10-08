@@ -1,15 +1,12 @@
-package com.virtualpairprogrammers;
+package com.sparkinvertedindex;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.*;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
-import org.apache.spark.api.java.function.FlatMapFunction;
 import scala.Tuple2;
 import scala.util.parsing.combinator.testing.Str;
 import org.rocksdb.Options;
@@ -77,7 +74,6 @@ public class SparkInvertedIndex {
 		// Grouping by words
 		JavaPairRDD<String, Iterable<Tuple2<String, Integer>>> wordToDocCountGrouped = wordToDocCount.groupByKey();
 		List<Tuple2<String, Iterable<Tuple2<String, Integer>>>>result = wordToDocCountGrouped.take(10);
-		/*
 		for(Tuple2<String, Iterable<Tuple2<String, Integer>>> r : result)
 		{
 			System.out.println("Word:" + r._1);
@@ -86,7 +82,7 @@ public class SparkInvertedIndex {
 				System.out.println(d._1 + " " + d._2);
 			System.out.println(".........................................");
 		}
-		 */
+
 
 		//JavaPairRDD<List<String>, String> sentences = inputdocs.mapToPair(data -> new Tuple2< List<String>, String>(Arrays.asList(data._2().split(" ")), data._1()));
 		/*
