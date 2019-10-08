@@ -1,10 +1,9 @@
+package springbootServer;
 
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Scanner;
 
 
 @RestController
@@ -26,7 +24,7 @@ public class SearchController {
 
 	@RequestMapping("/search")
 	@ResponseBody
-	public List<String> getURLs(@RequestParam("query") String query) throws Exception {
+	public List<List<String>> getURLs(@RequestParam("query") String query) throws Exception {
 //		HashMap<String, String> idURLpairs = new HashMap<>();
 //		final Path path = new Path("/user/id_URL_pairs.txt");
 //		try(final DistributedFileSystem dFS = new DistributedFileSystem() {
@@ -45,21 +43,28 @@ public class SearchController {
 //		}
 
 		RocksDB.loadLibrary();
-
-		String RocksdbPath = "/home/hadoopuser/Desktop";
+		System.out.println(query);
+		List<String> wordList = Arrays.asList(query.split(" "));
+		HashSet<String> finalQuery = new HashSet<>();
+		for(String x: wordList) {
+			finalQuery.add(x.toLowerCase());
+		}
+		List<List<String>> URLList = new ArrayList<>();
+		String RocksdbPath = "/Users/aayushgupta/IdeaProjects/data/";
 		Options rockopts = new Options();
 		RocksDB db = null;
-		HashMap<String, List<String>> map = new HashMap<>();
 		try {
 	        db = RocksDB.open(rockopts, RocksdbPath);
 	        RocksIterator iter = db.newIterator();
 	        iter.seekToFirst();
 	        while (iter.isValid()) {
 	            String key = new String(iter.key(), StandardCharsets.UTF_8);
-	            List<String> val = new ArrayList<>();
-	            String temp = new String(iter.value(), StandardCharsets.UTF_8);
-	            val.add(temp);
-	            map.put(key, val);
+	            if(finalQuery.contains(key))
+				{
+					List<String> val = new ArrayList<>();
+					String temp = new String(iter.value(), StandardCharsets.UTF_8);
+					URLList.add(new ArrayList<>(val));
+				}
 	            iter.next();
 	        }
 
@@ -67,16 +72,6 @@ public class SearchController {
 	    } catch (RocksDBException rdbe) {
 	        rdbe.printStackTrace(System.err);
 	    }
-
-		List<String> wordList = query.split(" ").;
-		HashSet<String> duplicates = new HashSet<>();
-		for(String x: wordList) {
-			duplicates.put(x.toLowerCase());
-		}
-		List<String> URLList = new ArrayList<>();
-		for(String x: duplciates) {
-			URLList.add(map.get(query);)
-		}
 
 	    return URLList;
 	}
