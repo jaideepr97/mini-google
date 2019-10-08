@@ -12,6 +12,9 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import scala.Tuple2;
 import scala.util.parsing.combinator.testing.Str;
+import org.rocksdb.Options;
+import org.rocksdb.RocksDB;
+import org.rocksdb.RocksDBException;
 
 public class SparkInvertedIndex {
 
@@ -94,6 +97,37 @@ public class SparkInvertedIndex {
 			System.out.println(res._1 + "-" + res._2);
 		}
 		*/
+		RocksDB.loadLibrary();
+		String RocksdbPath = "/home/hadoopuser/Desktop";
+
+		List<Tuple2<String, Iterable<Tuple2<String, Integer>>>> invertedIndex = wordToDocCountGrouped.collect();
+		ArrayList<byte[]> word= new ArrayList<>();
+		ArrayList<byte[]> URL= new ArrayList<>();
+		for(Tuple2<String, Iterable<Tuple2<String, Integer>>> r : invertedIndex)
+		{
+			word.add(r._1.getBytes());
+			for(Tuple2<String, Integer> d : r._2) {
+				URL.add(d._1().getBytes());
+			}
+
+		}
+
+ 		try (final Options options = new Options().setCreateIfMissing(true)) {
+
+		    // a factory method that returns a RocksDB instance
+		    try (final RocksDB db = RocksDB.open(options, RocksdbPath)) {
+		    	for(int i=0; i<word.size(); i++) {
+
+		    		db.put(word.get(i), URL.get(i));
+		    	}
+		        // do something
+		    }
+		  } catch (RocksDBException e) {
+		    // do some error handling
+
+		  }
+
+
 	}
 
 }
