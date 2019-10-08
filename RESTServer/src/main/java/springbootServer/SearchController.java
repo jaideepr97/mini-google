@@ -24,7 +24,7 @@ public class SearchController {
 
 	@RequestMapping("/search")
 	@ResponseBody
-	public List<List<String>> getURLs(@RequestParam("query") String query) throws Exception {
+	public <List<String> getURLs(@RequestParam("query") String query) throws Exception {
 //		HashMap<String, String> idURLpairs = new HashMap<>();
 //		final Path path = new Path("/user/id_URL_pairs.txt");
 //		try(final DistributedFileSystem dFS = new DistributedFileSystem() {
@@ -73,7 +73,15 @@ public class SearchController {
 	    } catch (RocksDBException rdbe) {
 	        rdbe.printStackTrace(System.err);
 	    }
-	    return urlList;
+
+			HashSet<String> finalURLset = new HashSet<>();
+			for(List<String> s: urlList) {
+				for(String x: s) {
+						finalURLlist.add(s);
+				}
+			}
+			List<String> finalURLlist = new ArrayList<String>(finalURLset);
+	    return finalURLlist;
 	}
 
 }
