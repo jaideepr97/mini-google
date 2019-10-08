@@ -49,7 +49,7 @@ public class SearchController {
 		for(String x: wordList) {
 			finalQuery.add(x.toLowerCase());
 		}
-		List<List<String>> URLList = new ArrayList<>();
+		List<List<String>> urlList = new ArrayList<>();
 		String RocksdbPath = "/Users/aayushgupta/IdeaProjects/data/";
 		Options rockopts = new Options();
 		RocksDB db = null;
@@ -59,21 +59,21 @@ public class SearchController {
 	        iter.seekToFirst();
 	        while (iter.isValid()) {
 	            String key = new String(iter.key(), StandardCharsets.UTF_8);
-	            if(finalQuery.contains(key))
+	            if(finalQuery.contains(key) || finalQuery.contains(key.toLowerCase()) || finalQuery.contains(key.toUpperCase()))
 				{
-					List<String> val = new ArrayList<>();
 					String temp = new String(iter.value(), StandardCharsets.UTF_8);
-					URLList.add(new ArrayList<>(val));
+					String[] tempArray = temp.split(" ");
+					List<String> tempList = new ArrayList<>(Arrays.asList(tempArray));
+					urlList.add(tempList);
 				}
 	            iter.next();
 	        }
 
-	        db.close();
+	        //db.close();
 	    } catch (RocksDBException rdbe) {
 	        rdbe.printStackTrace(System.err);
 	    }
-
-	    return URLList;
+	    return urlList;
 	}
 
 }

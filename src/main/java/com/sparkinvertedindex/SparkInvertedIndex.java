@@ -1,6 +1,7 @@
 package com.sparkinvertedindex;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
@@ -73,17 +74,27 @@ public class SparkInvertedIndex {
 		JavaPairRDD<String, Tuple2<String, Integer>> wordToDocCount = wordDocToCount.mapToPair(data -> new Tuple2<>(data._1._1, new Tuple2<>(data._1._2, data._2)));
 		// Grouping by words
 		JavaPairRDD<String, Iterable<Tuple2<String, Integer>>> wordToDocCountGrouped = wordToDocCount.groupByKey();
-		List<Tuple2<String, Iterable<Tuple2<String, Integer>>>>result = wordToDocCountGrouped.take(10);
-		for(Tuple2<String, Iterable<Tuple2<String, Integer>>> r : result)
+		//Flatten the rdd to (word, comma separated count and urls)
+        JavaPairRDD<String, String> wordToCountURLFlattened = wordToDocCountGrouped.mapToPair(data ->
+        {
+            String word = data._1;
+            Iterable<Tuple2<String, Integer>> URLCountList = data._2;
+            StringBuilder sb = new StringBuilder();
+            for(Tuple2<String, Integer> s : URLCountList)
+            {
+                sb.append(s._1);
+                sb.append(" ");
+            }
+            Tuple2<String, String> result = new Tuple2<>(word, sb.toString());
+            return result;
+        });
+		List<Tuple2<String, String>>result = wordToCountURLFlattened.take(10);
+		for(Tuple2<String, String> r : result)
 		{
 			System.out.println("Word:" + r._1);
-			System.out.println("Docs | Counts");
-			for(Tuple2<String, Integer> d : r._2)
-				System.out.println(d._1 + " " + d._2);
+			System.out.println("URLS,Counts:"+ r._2);
 			System.out.println(".........................................");
 		}
-
-
 		//JavaPairRDD<List<String>, String> sentences = inputdocs.mapToPair(data -> new Tuple2< List<String>, String>(Arrays.asList(data._2().split(" ")), data._1()));
 		/*
 		List<Tuple2<String, String>> result = inputdocs.collect();
@@ -96,16 +107,13 @@ public class SparkInvertedIndex {
 		RocksDB.loadLibrary();
 		String RocksdbPath = "/Users/aayushgupta/IdeaProjects/data/";
 
-		List<Tuple2<String, Iterable<Tuple2<String, Integer>>>> invertedIndex = wordToDocCountGrouped.collect();
+		List<Tuple2<String, String>> invertedIndex = wordToCountURLFlattened.collect();
 		ArrayList<byte[]> word= new ArrayList<>();
 		ArrayList<byte[]> URL= new ArrayList<>();
-		for(Tuple2<String, Iterable<Tuple2<String, Integer>>> r : invertedIndex)
+		for(Tuple2<String, String> r : invertedIndex)
 		{
 			word.add(r._1.getBytes());
-			for(Tuple2<String, Integer> d : r._2) {
-				URL.add(d._1().getBytes());
-			}
-
+			URL.add(r._2.getBytes());
 		}
 
  		try (final Options options = new Options().setCreateIfMissing(true)) {
@@ -123,7 +131,6 @@ public class SparkInvertedIndex {
 		    // do some error handling
 
 		  }
-
 
 	}
 
