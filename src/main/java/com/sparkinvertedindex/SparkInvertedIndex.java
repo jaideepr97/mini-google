@@ -94,7 +94,7 @@ public class SparkInvertedIndex {
 		}
 		*/
 		RocksDB.loadLibrary();
-		String RocksdbPath = "/home/hadoopuser/Desktop";
+		String RocksdbPath = "/Users/aayushgupta/IdeaProjects/data/";
 
 		List<Tuple2<String, Iterable<Tuple2<String, Integer>>>> invertedIndex = wordToDocCountGrouped.collect();
 		ArrayList<byte[]> word= new ArrayList<>();
@@ -119,6 +119,7 @@ public class SparkInvertedIndex {
 		        // do something
 		    }
 		  } catch (RocksDBException e) {
+ 			System.out.println(e.toString());
 		    // do some error handling
 
 		  }
