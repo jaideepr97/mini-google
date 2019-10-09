@@ -38,6 +38,9 @@ mini-google-group-2
                |__SparkInvertedIndex.java - This is used to create the inverted index and store it in RocksDB.  
 </pre>
 #Instructions  
+Before we can proceed with executing the applications, we must first build both of them as maven projects so that maven can download the required dependencies. We used the intellij IDE for this purpose, but this can be achieved through any IDE or the corresponding shell commands for maven
+
+We have also included a bash script (script.sh) to upload all the documents and the id_URL_pairs.txt file to the HDFS system if required.
   
 1. Creating the Inverted index: To create the inverted index, we need to run the mini-google-group-2/src/main/java/com/sparkInvertedIndex/SparkInvertedIndex.java file. In this file we need to provide the values for 3 variables:  
 a) contentPath: Provide your hdfs path where your content files are stored. For example, if you have 2000 files stored in the path hdfs://localhost:8020/docfiles/, you will provide this value in this variable. (line 23)
