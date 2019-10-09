@@ -24,23 +24,7 @@ public class SearchController {
 
 	@RequestMapping("/search")
 	@ResponseBody
-	public <List<String> getURLs(@RequestParam("query") String query) throws Exception {
-//		HashMap<String, String> idURLpairs = new HashMap<>();
-//		final Path path = new Path("/user/id_URL_pairs.txt");
-//		try(final DistributedFileSystem dFS = new DistributedFileSystem() {
-//			{
-//				initialize(new URI("hdfs://localhost:9000"), new Configuration());
-//			}
-//		};
-//
-//		final FSDataInputStream streamReader = dFS.open(path);
-//		final Scanner scanner = new Scanner(streamReader);) {
-//
-//			while(scanner.hasNextLine()) {
-//				idURLpairs.put(scanner.nextLine().split(",")[0], scanner.nextLine().split(",")[1]);
-//			}
-//
-//		}
+	public List<String> getURLs(@RequestParam("query") String query) throws Exception {
 
 		RocksDB.loadLibrary();
 		System.out.println(query);
@@ -50,11 +34,11 @@ public class SearchController {
 			finalQuery.add(x.toLowerCase());
 		}
 		List<List<String>> urlList = new ArrayList<>();
+		// Add absolute path to where the RocksDB files are stored
 		String RocksdbPath = "/Users/aayushgupta/IdeaProjects/data/";
 		Options rockopts = new Options();
-		RocksDB db = null;
 		try {
-	        db = RocksDB.open(rockopts, RocksdbPath);
+	        final RocksDB db = RocksDB.open(rockopts, RocksdbPath);
 	        RocksIterator iter = db.newIterator();
 	        iter.seekToFirst();
 	        while (iter.isValid()) {
@@ -68,8 +52,8 @@ public class SearchController {
 				}
 	            iter.next();
 	        }
-
-	        //db.close();
+			iter.close();
+	        db.close();
 	    } catch (RocksDBException rdbe) {
 	        rdbe.printStackTrace(System.err);
 	    }
@@ -77,7 +61,7 @@ public class SearchController {
 			HashSet<String> finalURLset = new HashSet<>();
 			for(List<String> s: urlList) {
 				for(String x: s) {
-						finalURLlist.add(s);
+					finalURLset.add(x);
 				}
 			}
 			List<String> finalURLlist = new ArrayList<String>(finalURLset);

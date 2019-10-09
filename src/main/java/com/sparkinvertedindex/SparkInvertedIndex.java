@@ -19,8 +19,13 @@ public class SparkInvertedIndex {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		SparkConf conf = new SparkConf().setAppName("FirstApp").setMaster("local[*]");
+		//Add your HDFS file path to the content
 		String contentPath = "hdfs://localhost:8020/docfiles/";
+		//Add your HDFS file path to the id_url_pairs.txt file
 		String id_url_path = "hdfs://localhost:8020/id_url_pairs/id_URL_pairs.txt";
+		//Add the absolute path to where you want to store the RocksDB files
+		String RocksdbPath = "/Users/aayushgupta/IdeaProjects/data/";
+
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		//Get id-url pairs
 		JavaPairRDD<String, String> idUrlPairs = sc.textFile(id_url_path).mapToPair(data ->
@@ -105,7 +110,6 @@ public class SparkInvertedIndex {
 		}
 		*/
 		RocksDB.loadLibrary();
-		String RocksdbPath = "/Users/aayushgupta/IdeaProjects/data/";
 
 		List<Tuple2<String, String>> invertedIndex = wordToCountURLFlattened.collect();
 		ArrayList<byte[]> word= new ArrayList<>();
