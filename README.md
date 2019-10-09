@@ -21,7 +21,7 @@ It uses the following components:
 
 #Project Structure:  
 The project has the following structure:  
-
+<pre>
 mini-google-group-2  
 |__RESTServer  
 |   |__src  
@@ -36,7 +36,7 @@ mini-google-group-2
          |__com  
             |__sparkInvertedIndex  
                |__SparkInvertedIndex.java - This is used to create the inverted index and store it in RocksDB.  
-
+</pre>
 #Instructions  
   
 1. Creating the Inverted index: To create the inverted index, we need to run the mini-google-group-2/src/main/java/com/sparkInvertedIndex/SparkInvertedIndex.java file. In this file we need to provide the values for 3 variables:  
