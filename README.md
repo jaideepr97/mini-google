@@ -40,14 +40,14 @@ mini-google-group-2
 #Instructions  
   
 1. Creating the Inverted index: To create the inverted index, we need to run the mini-google-group-2/src/main/java/com/sparkInvertedIndex/SparkInvertedIndex.java file. In this file we need to provide the values for 3 variables:  
-a) contentPath: Provide your hdfs path where your content files are stored. For example, if you have 2000 files stored in the path hdfs://localhost:8020/docfiles/, you will provide this value in this variable.   
-b) id_url_path: Provide your hdfs path for your id_url_pairs.txt file. For example, if your file is stored in hdfs://localhost:8020/id_url_pairs/id_url_pairs.txt, you will provide this value in this variable.  
-c) RocksdbPath: Provide the absolute path where you want to store the RocksDB files. For example /Users/aayushgupta/IdeaProjects/data/. Note: Absolute path is needed in this case.  
+a) contentPath: Provide your hdfs path where your content files are stored. For example, if you have 2000 files stored in the path hdfs://localhost:8020/docfiles/, you will provide this value in this variable. (line 23)
+b) id_url_path: Provide your hdfs path for your id_url_pairs.txt file. For example, if your file is stored in hdfs://localhost:8020/id_url_pairs/id_url_pairs.txt, you will provide this value in this variable. (line 25)
+c) RocksdbPath: Provide the absolute path where you want to store the RocksDB files. For example /Users/aayushgupta/IdeaProjects/data/. Note: Absolute path is needed in this case. (line 27)
 Once we set the value of these variables, we can run the main() function in the SparkInvertedIndex.java file to create the inverted index, which will be stored in RocksDB as key value pairs.   
 
 2. Starting the service: Once the inverted index in created, we can start our server. To do this, we need to set the value of 1 variable in the file mini-google-group-2/RESTServer/src/main/java/springbootServer/SearchController.java:  
 a) RocksdbPath : Provide the absolute path of the dir where your RocksDB files are stored. Note: this needs to be an absolute path - the same which we gave earlier while creating the inverted index.  
-Once we have provided the value for this variable, we can now start the service. To do this, run the main() function in mini-google-group-2/RESTServer/src/main/java/springbootServer/MiniGoogleServer.java.This should start the server. Note: The server will run on the port 8081 by default. To change this, modift the port number in the file mini-google-group-2/RESTServer/src/main/resources/application.properties file.  
+Once we have provided the value for this variable, we can now start the service. To do this, run the main() function in mini-google-group-2/RESTServer/src/main/java/springbootServer/MiniGoogleServer.java.This should start the server. Note: The server will run on the port 8081 by default. To change this, modify the port number in the file mini-google-group-2/RESTServer/src/main/resources/application.properties file.  
 
 3. Querying: Once the service is up and running, we can now get query results. The format of the query is: localhost:8081/search?query=your query. For example, if the query is "obese person", the request will be localhost:8081/search?query=obese person. Note that the query is not surrounded by quotes. Running this in your browser or Postman will retrieve a list of URLs which is the result.  
 
