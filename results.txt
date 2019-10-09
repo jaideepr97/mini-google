@@ -1,0 +1,41 @@
+Queried term = kinEsiOlogy
+Results:
+http://www.umass.edu/gateway/academics/schools-and-colleges
+https://www.umass.edu/summer/programs-overview/educationusa-academy
+http://www.umass.edu/gateway/academics/schools-and-colleges#main-content
+https://www.umass.edu/nursing/research/faculty-research-interests
+https://www.umass.edu/gateway/academics/schools-and-colleges
+https://www.umass.edu/sphhs-online/about
+
+Queried term = PVTA
+Results:
+https://www.umass.edu/transportation/node
+https://www.umass.edu/newsoffice/article/my-umass-app-puts-resources-students%E2%80%99https://www.umass.edu/transportation/pvta-buses
+https://www.umass.edu/newsoffice/article/my-umass-app-puts-resources-students%E2%80%99#main-content
+
+Queried term = twitteado
+Results:
+https://twitter.com/Acidic_Blonde?lang=es
+https://twitter.com/520Sammy?lang=es
+https://twitter.com/bigmacher?lang=es
+https://twitter.com/businessinsider?lang=es
+https://twitter.com/reserved4kiyah?lang=es
+https://twitter.com/AlumniUMass?lang=es
+https://twitter.com/CNN?lang=es
+https://twitter.com/bigmacher?lang=es#timeline
+https://twitter.com/CNNTonight?lang=es
+https://twitter.com/ChihulyStudio?lang=es
+https://twitter.com/reserved4kiyah?lang=es#timeline
+https://twitter.com/YIbukun?lang=es
+https://twitter.com/YIbukun?lang=es#timeline
+
+Queried term = obesity diabetes
+Results:
+http://www.umass.edu/gateway/academics/schools-and-colleges
+http://www.umass.edu/gateway/academics/schools-and-colleges#main-content
+https://www.umass.edu/nursing/research/faculty-research-interests
+http://www.bbc.co.uk/health/
+https://www.umass.edu/gateway/academics/schools-and-colleges
+https://www.bbc.com/news/health
+https://www.bbc.co.uk/news/health
+https://www.bbc.com/news/business-49090754
