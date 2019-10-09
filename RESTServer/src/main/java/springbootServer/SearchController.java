@@ -28,10 +28,12 @@ public class SearchController {
 
 		RocksDB.loadLibrary();
 		System.out.println(query);
+		if(query.length() == 0)
+			return new ArrayList<>();
 		List<String> preprocessedWords = Arrays.asList(query.split(" "));
 		List<String> wordList = new ArrayList<>();
 		for(String x: preprocessedWords) {
-			String z = x.replaceAll("[ ](?=[ ])|[^-_A-Za-z0-9 ]+", "")
+			String z = x.replaceAll("[ ](?=[ ])|[^-_A-Za-z0-9 ]+", "");
 			wordList.add(z);		
 		}
 		HashSet<String> finalQuery = new HashSet<>();
